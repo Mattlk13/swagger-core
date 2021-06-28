@@ -237,7 +237,7 @@ public @interface Schema {
     /**
      * Allows to specify the access mode (AccessMode.READ_ONLY, READ_WRITE)
      *
-     * AccessMode.READ_ONLY: value will only be written to during a request but not returned during a response.
+     * AccessMode.READ_ONLY: value will not be written to during a request but may be returned during a response.
      * AccessMode.WRITE_ONLY: value will only be written to during a request but not returned during a response.
      * AccessMode.READ_WRITE: value will be written to during a request and returned during a response.
      *
@@ -312,7 +312,7 @@ public @interface Schema {
     /**
      * Allows enums to be resolved as a reference to a scheme added to components section.
      *
-     * @since 2.0.11
+     * @since 2.1.0
      * @return whether or not this must be resolved as a reference
      */
     boolean enumAsRef() default false;

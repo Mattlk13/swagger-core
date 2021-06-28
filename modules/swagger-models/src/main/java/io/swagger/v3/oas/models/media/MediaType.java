@@ -18,7 +18,6 @@ package io.swagger.v3.oas.models.media;
 
 import io.swagger.v3.oas.models.examples.Example;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -35,6 +34,8 @@ public class MediaType {
     private Object example = null;
     private Map<String, Encoding> encoding = null;
     private java.util.Map<String, Object> extensions = null;
+
+    private boolean exampleSetFlag;
 
     /**
      * returns the schema property from a MediaType instance.
@@ -93,11 +94,19 @@ public class MediaType {
     }
 
     public void setExample(Object example) {
-        this.example = example;
+        if (this.schema == null) {
+            this.example = example;
+            this.exampleSetFlag = true;
+            return;
+        }
+        this.example = this.schema.cast(example);
+        if (!(example != null && this.example == null)) {
+            this.exampleSetFlag = true;
+        }
     }
 
     public MediaType example(Object example) {
-        this.example = example;
+        setExample(example);
         return this;
     }
 
@@ -126,6 +135,14 @@ public class MediaType {
         }
         this.encoding.put(key, encodingItem);
         return this;
+    }
+
+    public boolean getExampleSetFlag() {
+        return exampleSetFlag;
+    }
+
+    public void setExampleSetFlag(boolean exampleSetFlag) {
+        this.exampleSetFlag = exampleSetFlag;
     }
 
     @Override

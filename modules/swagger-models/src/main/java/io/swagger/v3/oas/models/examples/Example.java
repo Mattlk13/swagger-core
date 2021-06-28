@@ -28,6 +28,8 @@ public class Example {
     private String $ref = null;
     private java.util.Map<String, Object> extensions = null;
 
+    private boolean valueSetFlag;
+
     /**
      * returns the summary property from a Example instance.
      *
@@ -78,10 +80,11 @@ public class Example {
 
     public void setValue(Object value) {
         this.value = value;
+        valueSetFlag = true;
     }
 
     public Example value(Object value) {
-        this.value = value;
+        setValue(value);
         return this;
     }
 
@@ -109,7 +112,7 @@ public class Example {
     }
 
     public void set$ref(String $ref) {
-        if ($ref != null && ($ref.indexOf(".") == -1 && $ref.indexOf("/") == -1)) {
+        if ($ref != null && ($ref.indexOf('.') == -1 && $ref.indexOf('/') == -1)) {
             $ref = "#/components/examples/" + $ref;
         }
         this.$ref = $ref;
@@ -141,6 +144,14 @@ public class Example {
     public Example extensions(java.util.Map<String, Object> extensions) {
         this.extensions = extensions;
         return this;
+    }
+
+    public boolean getValueSetFlag() {
+        return valueSetFlag;
+    }
+
+    public void setValueSetFlag(boolean valueSetFlag) {
+        this.valueSetFlag = valueSetFlag;
     }
 
     @Override

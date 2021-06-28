@@ -9,13 +9,19 @@ import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HandlesTypes;
+import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@HandlesTypes({Path.class, OpenAPIDefinition.class})
+/**
+ * deprecated since 2.1.2. Please use io.swagger.v3.jaxrs2.integration.SwaggerServletInitializer in
+ * swagger-jaxrs2-servlet-initializer-v2
+ */
+@Deprecated
+@HandlesTypes({Path.class, OpenAPIDefinition.class, ApplicationPath.class})
 public class SwaggerServletInitializer implements ServletContainerInitializer {
 
     static final Set<String> ignored = new HashSet();
@@ -27,8 +33,9 @@ public class SwaggerServletInitializer implements ServletContainerInitializer {
     public SwaggerServletInitializer() {
     }
 
+    @Override
     public void onStartup(Set<Class<?>> classes, ServletContext servletContext) throws ServletException {
-        if (classes != null && classes.size() != 0) {
+        if (classes != null && ! classes.isEmpty()) {
             Set<Class<?>> resources = new LinkedHashSet();
             classes.stream()
                     .filter(c -> ignored.stream().noneMatch(i -> c.getName().startsWith(i)))
@@ -37,7 +44,7 @@ public class SwaggerServletInitializer implements ServletContainerInitializer {
                 // init context
                 try {
                     SwaggerConfiguration oasConfig = new SwaggerConfiguration()
-                            .resourceClasses(resources.stream().map(c -> c.getName()).collect(Collectors.toSet()));
+                            .resourceClasses(resources.stream().map(Class::getName).collect(Collectors.toSet()));
 
                     new JaxrsOpenApiContextBuilder()
                             .openApiConfiguration(oasConfig)
